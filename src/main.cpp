@@ -1,12 +1,12 @@
-#pragma once
-
 #include <iostream>
 #include <vector>
+#include <array>
 
-#define NUM_RAYS 10 //macro for the number of Rays we want to simulate
+#include "main.hpp"
 
 
 int main(){
     std::cout << "hello world" << std::endl;
     return 0;
+
 }
