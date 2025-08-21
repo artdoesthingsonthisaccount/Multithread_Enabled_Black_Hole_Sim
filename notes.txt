@@ -1,0 +1,4 @@
+NOTES:
+
+light is affected by blackholes. not visa versa. in our total simulations 
+we should be working on the black holes before the rays in each and every step
