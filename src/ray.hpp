@@ -1,10 +1,6 @@
 #ifndef RAY_H
 #define RAY_H
 
-// #ifndef NUM_RAYS
-// #define NUM_RAYS 10
-// #endif
-
 #include <iostream>
 #include <utility>
 #include <algorithm>
@@ -16,8 +12,6 @@
 
 using namespace std;
 
-#define REGLOAD 1
-#define PRELOAD 0
 
 #define USING_CARTESIAN_COORDS 0
 #define USING_POLAR_COORDS 1
@@ -28,10 +22,6 @@ struct bhdata_wrt_ray{
     int bhtab_idx;
 };
 
-struct preloaded_ray_list_node {
-    class ray * ray_ptr;
-    struct preloaded_ray_list_node * next;
-};
 
 
 bool dist_cmp_less(bhdata_wrt_ray a, bhdata_wrt_ray b);
@@ -59,21 +49,20 @@ class ray{
 
         void preload(); //queues a ray in the preloading list (ok next thing we are doing is making this a queue instead)
         void update_position(void);
-        void update_range_fields(void);
         void set_bh_ptr(class bh * bhptr);
         class bh * get_bh_ptr(void);
 
         int get_pdirtype(void);
         void set_pdirtype(int _pdirtype);
         
-        std::array<double, NUM_DIMENSIONS> get_pdir(void);
+        std::array<double, NUM_DIMENSIONS> get_pdir_cartesian_explicit(struct bh * bh_of_prior_engagement);
+        std::array<double, NUM_DIMENSIONS> get_pdir_standard(void);
         void set_pdir(const int pdir);
-        void update_pdir(void);
 
     private:
         std::array<double, NUM_DIMENSIONS> coords; //coordinates of the ray
         class bh * bh_in_range;
-        vector<bhdata_wrt_ray>  bhdata;
+        std::priority_queue<bhdata_wrt_ray>  bhd_pq; //priority queue for black holes that are closer wrt the ray head
 
         /*
         use cartesian by default. this value just encodes what we're currently using use polar 
