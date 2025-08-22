@@ -14,6 +14,8 @@ using namespace std;
 
 class bh{
     public:
+        bh();
+        bh(std::array<double, NUM_BH> _coords, std::array<double, NUM_BH> _cpd, double _m, double _r, double _s);
         std::array<double, NUM_DIMENSIONS> get_coords(void);
         void set_coords(std::array<double, NUM_DIMENSIONS> cc);
         std::array<double, NUM_DIMENSIONS> get_cartesian_pd(void);

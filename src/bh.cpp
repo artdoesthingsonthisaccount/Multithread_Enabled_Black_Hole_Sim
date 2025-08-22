@@ -2,8 +2,26 @@
 
 #include <iostream>
 
+bh::bh(){
+//random generation with some guards to make sure they don't end up too close to close to eachother.
+}
+bh::bh(std::array<double, NUM_BH> _coords, std::array<double, NUM_BH> _cpd, double _m, double _r, double _s){
+    coords = _coords;
+    cartesian_pd = _cpd;
+    mass = _m;
+    radius = _r;
+    spin = _s;
+}
 
 
+
+//theres no way its that easy
+void bh::update_position(void){
+    for(int i=0; i<NUM_DIMENSIONS; i++){
+        coords[i] += cartesian_pd[i];
+    }
+    //add the graphics lines here
+}
 
 std::array<double, NUM_DIMENSIONS> bh::get_coords(void){
     return coords;
@@ -17,11 +35,6 @@ std::array<double, NUM_DIMENSIONS> bh::get_cartesian_pd(void){
 void bh::set_cartesian_pd(std::array<double, NUM_DIMENSIONS> cpd){
     cartesian_pd = cpd;
 }
-// void bh::update_position(void){
-//     for(int i=0; i<NUM_DIMENSIONS; i++){
-//         coords[i] += cartesian_pd[i];
-//     }
-// }
 void bh::set_mass(double m){    
     mass = m;
 }
