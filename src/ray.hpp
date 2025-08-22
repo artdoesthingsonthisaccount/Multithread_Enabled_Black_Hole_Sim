@@ -71,7 +71,27 @@ class ray{
         */
         int pdirtype = USING_CARTESIAN_COORDS; 
         std::array<double, NUM_DIMENSIONS> pdir;
-        std::vector<std::array<double,NUM_DIMENSIONS>> ray_trail;
+        std::vector<std::array<double,NUM_DIMENSIONS>> ray_trail; //TAKE THIS OUT AND REPLACE WITH THE RT CLASS
 };
+
+
+
+//the RAY part handles placing the graphics for the head of the ray (one signal point) while the raytrail
+//class deals with "removing" the back. this raytrail class will basically allow it to inch forward with the head. 
+// in the future I'll implement somehting to account for the dynamic bending of the rays due to the movement of the blackholes.
+
+
+
+class rt {
+    public:
+        void propagate_rt(void);
+        //way more room for improvement
+    private:
+        std::vector<std::array<double, NUM_DIMENSIONS>> ray_trail;
+};
+
+
+
+
 
 #endif
