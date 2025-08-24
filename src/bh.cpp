@@ -16,11 +16,15 @@ bh::bh(std::array<double, NUM_BH> _coords, std::array<double, NUM_BH> _cpd, doub
 
 
 //theres no way its that easy
-void bh::update_position(void){
+void bh::update_position(double time_nHz){
     for(int i=0; i<NUM_DIMENSIONS; i++){
-        coords[i] += cartesian_pd[i];
+        coords[i] += cartesian_pd[i] * (time_nHz/std::pow(10, -9));
     }
-    //add the graphics lines here
+
+    //TODO: RENDER BLACK HOLE HERE
+}
+void bh::update_pdir(){
+    //TODO: IMPLEMENT THIS FUNCTION
 }
 
 std::array<double, NUM_DIMENSIONS> bh::get_coords(void){

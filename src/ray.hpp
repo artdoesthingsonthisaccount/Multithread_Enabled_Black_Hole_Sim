@@ -41,6 +41,7 @@ class ray{
         updates position as well as blackhole in range and
         pdir based on if there IS a blackhole in range
         */
+        void update_state(double time_nHz); //updates time in nHz
 
 
         double calc_redshift(int bhtab_idx); //calculates the redshift of the ray wrt the black hole at bhtab_idx
@@ -48,10 +49,8 @@ class ray{
 
 
         void preload(); //queues a ray in the preloading list (ok next thing we are doing is making this a queue instead)
-        void update_position(void);
         void set_bh_ptr(class bh * bhptr);
         class bh * get_bh_ptr(void);
-
         int get_pdirtype(void);
         void set_pdirtype(int _pdirtype);
         
@@ -86,9 +85,12 @@ class ray{
 class rt {
     public:
         void propagate_rt(std::array<double, NUM_DIMENSIONS> new_head);
-        //way more room for improvement
     private:
-        std::vector<std::array<double, NUM_DIMENSIONS>> ray_trail;
+
+        //data_structure used
+        std::array<std::array<double, NUM_DIMENSIONS>, MAX_RAY_TRAIL_LEN> ray_trail;
+        unsigned long head_idx = 0; //also encodes how many points/ticks traveled possibly
+        unsigned long tail_idx = 0;
 };
 
 

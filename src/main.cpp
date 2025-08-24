@@ -1,12 +1,12 @@
-#include <iostream>
-#include <vector>
-#include <array>
+#include "time_prop.hpp"
 
-#include "main.hpp"
+#include <iostream>
+
 
 
 int main(){
     std::cout << "hello world" << std::endl;
-    return 0;
 
+    step_loop();
+    return 0;
 }

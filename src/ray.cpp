@@ -50,7 +50,7 @@ ray::ray(std::array<double, NUM_DIMENSIONS> _coords, std::array<double, NUM_DIME
 updates position as well as blackhole in range and
 pdir based on if there IS a blackhole in range
 */
-void ray::update_position(void){
+void ray::update_state(double time_nHz){
     /*
     update bookkeeping on nearest bh WITHIN RANGE (bh outside of the POLAR_COMP_DIST arent considered)
 
@@ -116,9 +116,9 @@ void ray::update_position(void){
 
 
 
-    std::array<double, NUM_DIMENSIONS> new_head;
+    std::array<double, NUM_DIMENSIONS> new_head_coords;
     //math for calculating new_head
-    ray_trail.propagate_rt(new_head);
+    ray_trail.propagate_rt(new_head_coords);
 
 
     //math for calculating new_pdir
@@ -181,6 +181,22 @@ std::array<double, NUM_DIMENSIONS> ray::get_pdir_cartesian_explicit(struct bh * 
     }
 
 }
+
+void rt::propagate_rt(std::array<double, NUM_DIMENSIONS> new_head){
+    if (head_idx - tail_idx >= MAX_RAY_TRAIL_LEN){
+        unsigned long local_tail_idx = tail_idx % MAX_RAY_TRAIL_LEN;
+        //TODO: remove tail in graphics, where ray_trail.at(local_tail_idx) corresponds to the point to remove 
+        tail_idx++;
+    }
+    
+    ray_trail.at((head_idx+1) %MAX_RAY_TRAIL_LEN) = new_head; 
+    //TODO: add head in graphics
+    head_idx++;
+}
+
+
+
+
 
 //this just takes any polar coordinates and does the simple math of converting them to rectangular coordinates
 std::array<double, NUM_DIMENSIONS> polar_to_rectangular_pdir_conversion(std::array<double, NUM_DIMENSIONS> polar_coords){
