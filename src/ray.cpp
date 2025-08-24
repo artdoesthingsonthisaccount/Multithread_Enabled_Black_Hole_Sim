@@ -52,44 +52,81 @@ pdir based on if there IS a blackhole in range
 */
 void ray::update_position(void){
     /*
-    check if the nearest black hole is within range
-
-    if it is, then we need to CHECK FOR DOUBLE BLACKHOLE BOUNDARY 
-    and update the pdir to be polar (double blackhole boundary is when
-    the ray is between two black holes, but I don't know what the solution to this would be. something to resolve with pdir)
-    
-
-    if it is not, then we need to check if it was before (whether or not the bh_in_range pointer was set or NULL)
-    then, we have a few strategies for optimization how many times we have to edit blackholes in a heap each step.
-    1. we can just update all of them...
-    2. we can edit the first 3 blackholes in the heap every step, and update the others every 5-10 steps
-    
-    3. LATER we are building our own library for smart heap anyway. so maybe we can just wait till then for the optimization.
+    update bookkeeping on nearest bh WITHIN RANGE (bh outside of the POLAR_COMP_DIST arent considered)
 
 
     Finally we can just deal with regular situations, such as moving in range of the black hole from blank space AND OFCOURSE UPDATE PDIR ACCORDINGLY
     (blackhole in range, and none set by pointer already -> pointer set), leaving a blackhole to blank space (pointer full and ray leaving blackhole range -> pointer NULLed)
 
 
-    next we update the lights
     next we can progress (or propagate) the ray trail
+    next we can calculate the new pdir based on position of all of the blackholes and the ray
 
-    and finally we can increment the step
+    and finally we can increment the number of rays
     */
     
 
+    if (!bh_in_range){ //no current bh in range
+        if (calc_dist(bhd_pq.top().bhtab_idx) < POLAR_COMP_RAD){
+            bh_in_range = bhtab[bhd_pq.top().bhtab_idx];
+
+
+            if (get_pdirtype() == USING_POLAR_COORDS){
+                //special case for if we were already in polar coordinates and there is no specified origin (bh)
+                
+                //delete ray here
+                return; 
+            }else{
+                set_pdirtype(USING_POLAR_COORDS);
+                //TODO: CONVERT TO POLAR_COORDINATES WRT BH HERE
+            }
+            
+        }
+    } else{ //there currently is a bh in range
+        int bh_in_range_idx = 
+        (int)((char *)(bh_in_range) -(char *)&bhtab)/sizeof(struct bh *); 
+
+        if(bh_in_range_idx != bhd_pq.top().bhtab_idx){
+            double closest_in_range_distance = calc_dist(bh_in_range_idx);
+            double heap_top_distance = calc_dist(bh_in_range_idx);
+
+            // closest_in_range_distance == heap_top_distance is a special case for if two bh are the same distance away from a ray
+            if (closest_in_range_distance == heap_top_distance){
+                return;
+            }
+            if (heap_top_distance < closest_in_range_distance){
+
+                bh_in_range = bhtab[bhd_pq.top().bhtab_idx];
+                closest_in_range_distance = heap_top_distance;
+            }
+
+            if (closest_in_range_distance > POLAR_COMP_RAD){
+
+                //convert to rectangular coordinates    
+                set_pdir(get_pdir_cartesian_explicit(bh_in_range));                
+                set_pdirtype(USING_CARTESIAN_COORDS);
+                bh_in_range = NULL;
+            }
+
+            
+        }
+    }
+
+    //CODE FOR RECALCULATING HEAP HERE!!!!!!! 
+
+
+
+    std::array<double, NUM_DIMENSIONS> new_head;
+    //math for calculating new_head
+    ray_trail.propagate_rt(new_head);
+
+
+    //math for calculating new_pdir
+
+    ray_cnt++;
 }
 
-//THIS ONE IS DEFINITELY PROBABLY WRONG
-void ray::set_pdir(const int pdir){
-    //TODO: FIX THIS SHIT
 
-}
-
-//just directly returns the encapsulated value of pdir
-std::array<double, NUM_DIMENSIONS> ray::get_pdir_standard(){
-    return pdir;
-}
 
 
 //returns the cartesian pdir with respect to the true origin UNDER THE PRETEXT that we provide the
@@ -100,6 +137,8 @@ std::array<double, NUM_DIMENSIONS> ray::get_pdir_cartesian_explicit(struct bh * 
     if (bh_of_prior_engagement){
         bh_pd_offset = bh_of_prior_engagement->get_cartesian_pd();
         
+
+        //TODO: THE MATH HERE IS OFF
         if (pdirtype ==USING_POLAR_COORDS){//case in which we're already moving in circular coordinates to account for effects of the blackhole
             return polar_to_rectangular_pdir_conversion(get_pdir_standard()) + bh_pd_offset;
         }else if (pdirtype ==USING_CARTESIAN_COORDS) {//case in which we're moving in cartesian coordinates
@@ -133,6 +172,8 @@ std::array<double, NUM_DIMENSIONS> ray::get_pdir_cartesian_explicit(struct bh * 
                 }
 
             }
+
+            //TODO: MATH HERE IS OFF
             return polar_to_rectangular_pdir_conversion(get_pdir_standard())+ bh_pd_offset;
 
         }
@@ -151,7 +192,7 @@ std::array<double, NUM_DIMENSIONS> polar_to_rectangular_pdir_conversion(std::arr
 
 //this calculates the redshift of the blackhole from the ray's perspective
 double ray::calc_redshift(int bhtab_idx){
-    //TODO:
+    //TODO: implement this function properly
     return;
 }
 double ray::calc_dist(int bhtab_idx){
@@ -183,4 +224,9 @@ void ray::set_bh_ptr(class bh * bhptr){
 class bh * ray::get_bh_ptr(void){
     return bh_in_range;
 }
-
+void ray::set_pdir(const std::array<double, NUM_DIMENSIONS> _pdir){
+    pdir = _pdir;
+}
+std::array<double, NUM_DIMENSIONS> ray::get_pdir_standard(){
+    return pdir;
+}

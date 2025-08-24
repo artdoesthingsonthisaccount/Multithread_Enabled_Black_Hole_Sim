@@ -57,7 +57,7 @@ class ray{
         
         std::array<double, NUM_DIMENSIONS> get_pdir_cartesian_explicit(struct bh * bh_of_prior_engagement);
         std::array<double, NUM_DIMENSIONS> get_pdir_standard(void);
-        void set_pdir(const int pdir);
+        void set_pdir(const std::array<double, NUM_DIMENSIONS>_pdir);
 
     private:
         std::array<double, NUM_DIMENSIONS> coords; //coordinates of the ray
@@ -71,7 +71,8 @@ class ray{
         */
         int pdirtype = USING_CARTESIAN_COORDS; 
         std::array<double, NUM_DIMENSIONS> pdir;
-        std::vector<std::array<double,NUM_DIMENSIONS>> ray_trail; //TAKE THIS OUT AND REPLACE WITH THE RT CLASS
+
+        rt ray_trail;//new way to keep track of ray trail
 };
 
 
@@ -84,7 +85,7 @@ class ray{
 
 class rt {
     public:
-        void propagate_rt(void);
+        void propagate_rt(std::array<double, NUM_DIMENSIONS> new_head);
         //way more room for improvement
     private:
         std::vector<std::array<double, NUM_DIMENSIONS>> ray_trail;
