@@ -1,0 +1,34 @@
+# ---- CMake build artifacts ----
+/build/*
+!/build/.gitkeep
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+compile_commands.json
+CTestTestfile.cmake
+Testing/
+
+# ---- Compiled binaries and objects ----
+*.o
+*.obj
+*.so
+*.dll
+*.dylib
+*.exe
+*.out
+
+# ---- Logs ----
+*.log
+
+# ---- Editor/IDE files ----
+*.swp
+*.swo
+*.swn
+*.sw?
+*.DS_Store
+*.idea/
+.vscode/
+
+# ---- Backups ----
+*~
