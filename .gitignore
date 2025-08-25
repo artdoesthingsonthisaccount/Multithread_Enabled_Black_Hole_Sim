@@ -9,6 +9,9 @@ compile_commands.json
 CTestTestfile.cmake
 Testing/
 
+# ---- Project Notes ----
+notes.txt
+
 # ---- Compiled binaries and objects ----
 *.o
 *.obj

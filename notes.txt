@@ -1,8 +1,0 @@
-NOTES:
-
-light is affected by blackholes. not visa versa. in our total simulations 
-we should be working on the black holes before the rays in each and every step
-
-for rays, ALWAYS make sure you reset the pdir from polar to cartesian before you set bh_in_range= NULL. 
-If we end up with no blackhole to say we excaped from we don't have anything to convert the circular coords
-with respect to 

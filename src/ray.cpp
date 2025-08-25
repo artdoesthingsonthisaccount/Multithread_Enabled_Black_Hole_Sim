@@ -183,6 +183,11 @@ std::array<double, NUM_DIMENSIONS> ray::get_pdir_cartesian_explicit(struct bh * 
 }
 
 void rt::propagate_rt(std::array<double, NUM_DIMENSIONS> new_head){
+
+    //TODO: range check on new head
+    //strat: make an "offscreened" list of rays that are leaving the screen and deal with them a different way
+    // specifically just delete the trail at every step
+
     if (head_idx - tail_idx >= MAX_RAY_TRAIL_LEN){
         unsigned long local_tail_idx = tail_idx % MAX_RAY_TRAIL_LEN;
         //TODO: remove tail in graphics, where ray_trail.at(local_tail_idx) corresponds to the point to remove 
