@@ -8,6 +8,7 @@
 
 
 #define c 3^8 //speed of light in km/s
+#define G 3
 
 #define NUM_RAYS 10 //macro for the number of Rays we want to simulate
 #define NUM_BH 3

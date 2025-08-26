@@ -39,6 +39,8 @@ pkg_check_modules(GLFW3 REQUIRED glfw3)
 pkg_check_modules(GLEW  REQUIRED glew)
 find_package(OpenGL REQUIRED)
 
+find_package(Eigen3 3.3 REQUIRED NO_MODULE)
+
 add_executable(${PROJECT_NAME} src/main.cpp)
 
 target_include_directories(${PROJECT_NAME} PRIVATE
@@ -50,6 +52,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     ${GLFW3_LIBRARIES}
     ${GLEW_LIBRARIES}
     OpenGL::GL
+    Eigen3::Eigen
 )
 
 target_link_directories(${PROJECT_NAME} PRIVATE

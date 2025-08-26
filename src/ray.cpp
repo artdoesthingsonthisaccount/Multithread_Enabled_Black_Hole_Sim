@@ -75,6 +75,7 @@ void ray::update_state(double time_nHz){
                 //special case for if we were already in polar coordinates and there is no specified origin (bh)
                 
                 //delete ray here
+                //far more complicated math for this step...
                 return; 
             }else{
                 set_pdirtype(USING_POLAR_COORDS);
@@ -113,15 +114,26 @@ void ray::update_state(double time_nHz){
     }
 
     //CODE FOR RECALCULATING HEAP HERE!!!!!!! 
+    //if cartesian and out of range of any black hole (bh_in_range = NULL) we can sum up contributions here too0
+    
+    std::array<double, NUM_DIMENSIONS> new_head_coords;    
+    if (!bh_in_range){
+        //recalculate heap and add up contributions
+
+        //set new pdir
+        //new_head_coords
+    }else{
+        //just recalculate heap
+        //set new pdir
+        //new_head_coords
+    }
 
 
 
-    std::array<double, NUM_DIMENSIONS> new_head_coords;
-    //math for calculating new_head
+    
     ray_trail.propagate_rt(new_head_coords);
 
 
-    //math for calculating new_pdir
 
     ray_cnt++;
 }
